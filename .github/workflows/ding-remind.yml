@@ -1,0 +1,12 @@
+name: 钉钉打卡提醒
+on:
+  schedule:
+    - cron: '40 0 * * 1-5' # 北京时间 8:40 工作日
+  workflow_dispatch:
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 发送打卡提醒
+        run: |
+          curl -X POST -H "Content-Type: application/json" -d '{"msgtype":"text","text":{"content":"🔔 打卡提醒：现在 8:40，准备钉钉打卡！"}}' "https://oapi.dingtalk.com/robot/send?access_token=7285824f07e409d6fd6ba41b2afa1d73b0b5de6e4c8fe1303735b031bd95723c"
