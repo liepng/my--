@@ -1,18 +1,14 @@
+# 方案B最终可用完整版（直接全量替换）
 name: 钉钉打卡提醒
-
 on:
   schedule:
-    - cron: '40 0 * * 1-5'   # UTC 00:40 = 北京时间 08:40（周一到周五）
-  workflow_dispatch:        # 允许手动触发测试
-
+    - cron: '40 0 * * 1-5' # UTC00:40=北京时间08:40 工作日
+  workflow_dispatch:       # 手动点运行测试
 jobs:
   remind:
     runs-on: ubuntu-latest
     steps:
-      - name: 检查当前时间
-        run: date
-
-      - name: 发送钉钉打卡提醒
+      - name: 发送钉钉提醒
         env:
           DING_WEBHOOK: ${{ secrets.DING_WEBHOOK }}
         run: |
@@ -22,6 +18,3 @@ jobs:
             "msgtype": "text",
             "text": {"content": "🔔 打卡提醒：现在 08:40，记得钉钉打卡！"}
           }'
-
-      - name: 执行完成日志
-        run: echo "打卡提醒已发送 | $(date)"
