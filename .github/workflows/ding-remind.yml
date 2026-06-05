@@ -3,17 +3,16 @@ name: 钉钉打卡提醒
 on:
   schedule:
     - cron: '40 0 * * 1-5'   # UTC 00:40 = 北京时间 08:40（周一到周五）
-      timezone: 'Asia/Shanghai'
-  workflow_dispatch:        # 允许手动测试
+  workflow_dispatch:        # 允许手动触发测试
 
 jobs:
   remind:
     runs-on: ubuntu-latest
     steps:
-      - name: 设置时区为北京时间
-        run: sudo timedatectl set-timezone Asia/Shanghai
+      - name: 检查当前时间
+        run: date
 
-      - name: 发送钉钉提醒
+      - name: 发送钉钉打卡提醒
         env:
           DING_WEBHOOK: ${{ secrets.DING_WEBHOOK }}
         run: |
@@ -21,8 +20,8 @@ jobs:
           -H "Content-Type: application/json" \
           -d '{
             "msgtype": "text",
-            "text": {"content": "🔔 打卡提醒：现在 8:40，准备钉钉打卡！"}
+            "text": {"content": "🔔 打卡提醒：现在 08:40，记得钉钉打卡！"}
           }'
 
-      - name: 记录日志
-        run: echo "$(date '+%Y-%m-%d %H:%M:%S') 打卡提醒已发送" >> log.txt
+      - name: 执行完成日志
+        run: echo "打卡提醒已发送 | $(date)"
